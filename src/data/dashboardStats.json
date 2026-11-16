@@ -1,0 +1,65 @@
+{
+  "overview": {
+    "totalBuildings": 142850,
+    "totalBuildingsLabel": "142.8k (Est.)",
+    "totalRoadsKm": 1840,
+    "totalRoadsKmLabel": "1,840 km",
+    "infrastructurePointsCount": 1640,
+    "greenCoveragePercent": 14.8,
+    "greenCoverageLabel": "14.8%",
+    "populationEstimate": "2.84 Million",
+    "activeSimulationsCount": 4,
+    "dataDisclaimer": "SYNTHETIC DEMO DATASET - FOR PLANNING DEMONSTRATION ONLY",
+    "lastAudit": "2026-Q1 Simulation Cycle"
+  },
+  "landUseDistribution": [
+    { "name": "Residential High & Low Rise", "value": 42, "color": "#38bdf8" },
+    { "name": "Commercial & Tech IT Parks", "value": 24, "color": "#06b6d4" },
+    { "name": "Industrial & Warehousing", "value": 16, "color": "#6366f1" },
+    { "name": "Green Cover & Water Bodies", "value": 11, "color": "#10b981" },
+    { "name": "Institutional & Public Utilities", "value": 7, "color": "#f59e0b" }
+  ],
+  "infrastructureDistribution": [
+    { "category": "Health / Hospitals", "count": 148, "planned": 24 },
+    { "category": "Education / Schools", "count": 312, "planned": 38 },
+    { "category": "Parks & Green Lungs", "count": 220, "planned": 45 },
+    { "category": "Transit & Metro Hubs", "count": 64, "planned": 18 },
+    { "category": "Power & Water Grids", "count": 186, "planned": 30 },
+    { "category": "Civic & Emergency", "count": 94, "planned": 12 }
+  ],
+  "recentActivities": [
+    {
+      "id": "ACT-101",
+      "timestamp": "12 mins ago",
+      "type": "Simulation",
+      "title": "Peak Hour Traffic Congestion Model Run",
+      "detail": "NH-48 corridor between Cyber City and Rajiv Chowk stress-tested at 140% normal capacity.",
+      "status": "Completed"
+    },
+    {
+      "id": "ACT-102",
+      "timestamp": "45 mins ago",
+      "type": "Infrastructure",
+      "title": "Sector 56 Substation Telemetry Sync",
+      "detail": "Connected demo SCADA stream for 400kV busbar load balancing.",
+      "status": "Active"
+    },
+    {
+      "id": "ACT-103",
+      "timestamp": "2 hours ago",
+      "type": "Urban Planning",
+      "title": "Southern Peripheral Road Buffer Zone Proposal",
+      "detail": "Scenario #B-04 draft saved: +45 hectares urban forestry buffer along Sector 70.",
+      "status": "Draft"
+    },
+    {
+      "id": "ACT-104",
+      "timestamp": "4 hours ago",
+      "type": "Environment",
+      "title": "Air Quality Index (AQI) Simulation Ingestion",
+      "detail": "Virtual PM2.5 gradient generated from Aravalli boundary to NH-48 belt.",
+      "status": "Simulated"
+    }
+  ]
+}
+

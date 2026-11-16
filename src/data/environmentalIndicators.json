@@ -1,0 +1,28 @@
+{
+  "aqiMetrics": {
+    "cityAverageAQI": 182,
+    "classification": "Moderate to Unhealthy (Simulated Demo)",
+    "pm25": 114,
+    "pm10": 210,
+    "no2": 48,
+    "lastSampleTime": "19:00 IST (Synthesized)"
+  },
+  "temporalAQI": [
+    { "time": "00:00", "aqi": 140, "pm25": 85, "trafficIndex": 20 },
+    { "time": "04:00", "aqi": 165, "pm25": 98, "trafficIndex": 15 },
+    { "time": "08:00", "aqi": 245, "pm25": 160, "trafficIndex": 85 },
+    { "time": "12:00", "aqi": 190, "pm25": 120, "trafficIndex": 60 },
+    { "time": "16:00", "aqi": 215, "pm25": 140, "trafficIndex": 75 },
+    { "time": "20:00", "aqi": 260, "pm25": 175, "trafficIndex": 90 },
+    { "time": "23:00", "aqi": 195, "pm25": 130, "trafficIndex": 45 }
+  ],
+  "sectorsEnvironmental": [
+    { "sector": "Aravalli Ridge & Phase III", "greenCoverPct": 42.5, "heatIslandIndex": "Low (28°C)", "aqi": 120 },
+    { "sector": "Golf Course Road & Sec 54", "greenCoverPct": 21.0, "heatIslandIndex": "Moderate (31°C)", "aqi": 168 },
+    { "sector": "Cyber City & DLF Phase II", "greenCoverPct": 9.4, "heatIslandIndex": "High (36°C)", "aqi": 210 },
+    { "sector": "Udyog Vihar Industrial", "greenCoverPct": 5.2, "heatIslandIndex": "Very High (38°C)", "aqi": 255 },
+    { "sector": "Sohna Road Corridor", "greenCoverPct": 13.8, "heatIslandIndex": "Moderate (32°C)", "aqi": 190 },
+    { "sector": "New Gurugram (Sec 81-95)", "greenCoverPct": 18.2, "heatIslandIndex": "Moderate (30°C)", "aqi": 175 }
+  ]
+}
+

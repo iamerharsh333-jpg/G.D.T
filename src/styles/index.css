@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    border-color: #1e293b;
+  }
+  body {
+    background-color: #0a0d14;
+    color: #f1f5f9;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Custom modern scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0b1120;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Cesium container adjustments */
+.cesium-viewer {
+  font-family: 'Inter', sans-serif !important;
+}
+.cesium-viewer-bottom {
+  display: none !important; /* Hide Cesium credits / logo for clean interface in demo mode */
+}
+.cesium-widget-credits {
+  display: none !important;
+}
+
+/* Glassmorphism utility for floating control panels */
+.twin-panel-glass {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(30, 41, 59, 0.8);
+}
+
+.twin-card-glow:hover {
+  box-shadow: 0 0 15px -3px rgba(6, 182, 212, 0.15);
+  border-color: rgba(6, 182, 212, 0.4);
+}
+

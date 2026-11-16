@@ -1,0 +1,69 @@
+{
+  "dataset_name": "Gurugram Urban Core (DLF Cyber City & Udyog Vihar)",
+  "source": "OpenStreetMap Contributors",
+  "license": "Open Database License (ODbL)",
+  "extraction_date": "2026-11-16",
+  "coordinate_reference_system": "EPSG:4326 (WGS84)",
+  "geographic_bounding_box": {
+    "min_longitude": 77.068705,
+    "min_latitude": 28.481372,
+    "max_longitude": 77.112642,
+    "max_latitude": 28.521349,
+    "center": [
+      77.090673,
+      28.501361
+    ]
+  },
+  "summary": {
+    "total_raw_features": 4328,
+    "total_validated_features": 4328,
+    "geometry_integrity_rate": "100.0%",
+    "invalid_geometries_found": 0,
+    "duplicate_ids_removed": 0
+  },
+  "geometry_distribution": {
+    "Polygon": 3097,
+    "LineString": 1224,
+    "Point": 7
+  },
+  "layer_feature_counts": {
+    "buildings": 3050,
+    "roads": 1225,
+    "parks_and_leisure": 18,
+    "water_bodies": 3,
+    "landuse_zones": 25,
+    "amenities_and_pois": 7
+  },
+  "building_attribute_coverage": {
+    "total_buildings": 3050,
+    "surveyed_height_count": 2,
+    "surveyed_height_pct": 0.07,
+    "surveyed_floor_count": 25,
+    "surveyed_floor_pct": 0.82,
+    "named_buildings_count": 55,
+    "named_buildings_pct": 1.8,
+    "height_provenance": {
+      "source_provided": 2,
+      "levels_derived": 23,
+      "algorithmically_estimated": 3025
+    }
+  },
+  "road_attribute_coverage": {
+    "total_roads": 1225,
+    "named_roads_count": 141,
+    "named_roads_pct": 11.51,
+    "oneway_tagged_count": 261,
+    "oneway_tagged_pct": 21.31,
+    "lanes_tagged_count": 56,
+    "lanes_tagged_pct": 4.57,
+    "speed_limit_tagged_count": 30,
+    "speed_limit_tagged_pct": 2.45,
+    "classification_breakdown": {
+      "Service / Pedestrian Path": 703,
+      "Primary / Secondary Arterial": 53,
+      "Residential Street": 398,
+      "Tertiary / Sector Road": 55,
+      "Motorway / Expressway": 16
+    }
+  }
+}

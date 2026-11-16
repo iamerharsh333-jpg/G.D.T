@@ -1,0 +1,113 @@
+[
+  {
+    "id": "INF-GGM-001",
+    "name": "Medanta The Medicity Super Specialty",
+    "category": "Hospital",
+    "lat": 28.4395,
+    "lng": 77.0425,
+    "sector": "Sector 38",
+    "capacity": "1,250 Beds (Demo)",
+    "operationalStatus": "Operational",
+    "description": "Multi-super specialty medical institute with 24/7 tertiary care."
+  },
+  {
+    "id": "INF-GGM-002",
+    "name": "Fortis Memorial Research Institute",
+    "category": "Hospital",
+    "lat": 28.4585,
+    "lng": 77.0725,
+    "sector": "Sector 44",
+    "capacity": "1,000 Beds (Demo)",
+    "operationalStatus": "Operational",
+    "description": "Quaternary care hospital adjacent to HUDA City Centre Metro."
+  },
+  {
+    "id": "INF-GGM-003",
+    "name": "Millennium City Centre Metro Terminal",
+    "category": "Rapid Transit / Metro",
+    "lat": 28.4592,
+    "lng": 77.0728,
+    "sector": "Sector 29",
+    "capacity": "180,000 daily commuters (Demo)",
+    "operationalStatus": "Operational",
+    "description": "DMRC Yellow Line terminus connecting to Rapid Metro Gurugram."
+  },
+  {
+    "id": "INF-GGM-004",
+    "name": "Cyber City Rapid Metro Hub",
+    "category": "Rapid Transit / Metro",
+    "lat": 28.4940,
+    "lng": 77.0895,
+    "sector": "DLF Cyber City",
+    "capacity": "95,000 daily passengers (Demo)",
+    "operationalStatus": "Operational",
+    "description": "Elevated light rail loop connecting corporate sectors."
+  },
+  {
+    "id": "INF-GGM-005",
+    "name": "Aravalli Biodiversity Park",
+    "category": "Park / Green Space",
+    "lat": 28.4870,
+    "lng": 77.1080,
+    "sector": "DLF Phase III / Delhi Border",
+    "capacity": "392 Acres Ecological Reserve",
+    "operationalStatus": "Operational",
+    "description": "Ecological restoration zone with native flora, walking trails & water recharge."
+  },
+  {
+    "id": "INF-GGM-006",
+    "name": "Leisure Valley Urban Park",
+    "category": "Park / Green Space",
+    "lat": 28.4685,
+    "lng": 77.0655,
+    "sector": "Sector 29",
+    "capacity": "25 Acres",
+    "operationalStatus": "Operational",
+    "description": "Central municipal green lung featuring amphitheater and water bodies."
+  },
+  {
+    "id": "INF-GGM-007",
+    "name": "The Heritage Xperiential Learning School",
+    "category": "School / University",
+    "lat": 28.4180,
+    "lng": 77.0850,
+    "sector": "Sector 62",
+    "capacity": "3,400 Students",
+    "operationalStatus": "Operational",
+    "description": "K-12 educational campus with modern STEM and sports infrastructure."
+  },
+  {
+    "id": "INF-GGM-008",
+    "name": "Sector 56 Smart 400kV Grid Substation",
+    "category": "Power & Utilities",
+    "lat": 28.4320,
+    "lng": 77.1040,
+    "sector": "Sector 56",
+    "capacity": "960 MVA Transmission",
+    "operationalStatus": "Operational",
+    "description": "HVPNL gas-insulated transmission substation with SCADA telemetry."
+  },
+  {
+    "id": "INF-GGM-009",
+    "name": "GMDA Integrated Command & Control Centre",
+    "category": "Civic Facility",
+    "lat": 28.4480,
+    "lng": 77.0380,
+    "sector": "Sector 44",
+    "capacity": "City-wide Monitoring Center",
+    "operationalStatus": "Operational",
+    "description": "Municipal authority central command hub for traffic, CCTV and water monitoring."
+  },
+  {
+    "id": "INF-GGM-010",
+    "name": "Dhanwapur Water Treatment Plant",
+    "category": "Power & Utilities",
+    "lat": 28.4720,
+    "lng": 76.9950,
+    "sector": "Dhanwapur Sector 104",
+    "capacity": "100 MGD Capacity",
+    "operationalStatus": "Operational",
+    "description": "Surface water treatment facility sourcing from NCR water channels."
+  }
+]
+

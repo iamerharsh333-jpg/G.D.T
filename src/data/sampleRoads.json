@@ -1,0 +1,117 @@
+[
+  {
+    "id": "RD-GGM-001",
+    "name": "Delhi-Gurugram Expressway (NH-48)",
+    "category": "Expressway",
+    "lanes": 8,
+    "lengthKm": 27.7,
+    "speedLimitKmph": 90,
+    "surfaceType": "Dense Bituminous Concrete",
+    "congestionLevel": "Heavy",
+    "coordinates": [
+      [77.1020, 28.5120],
+      [77.0850, 28.4980],
+      [77.0650, 28.4720],
+      [77.0340, 28.4520],
+      [76.9950, 28.4100],
+      [76.9400, 28.3550]
+    ]
+  },
+  {
+    "id": "RD-GGM-002",
+    "name": "Golf Course Road 16-Lane Corridor",
+    "category": "Arterial Road",
+    "lanes": 16,
+    "lengthKm": 8.3,
+    "speedLimitKmph": 70,
+    "surfaceType": "High Performance Asphalt",
+    "congestionLevel": "Moderate",
+    "coordinates": [
+      [77.0980, 28.4950],
+      [77.0960, 28.4760],
+      [77.0990, 28.4550],
+      [77.1030, 28.4400],
+      [77.1060, 28.4280]
+    ]
+  },
+  {
+    "id": "RD-GGM-003",
+    "name": "Golf Course Extension Road (SPR Section)",
+    "category": "Arterial Road",
+    "lanes": 6,
+    "lengthKm": 11.2,
+    "speedLimitKmph": 60,
+    "surfaceType": "Bituminous Concrete",
+    "congestionLevel": "Moderate",
+    "coordinates": [
+      [77.1060, 28.4280],
+      [77.0850, 28.4120],
+      [77.0600, 28.4050],
+      [77.0380, 28.4010]
+    ]
+  },
+  {
+    "id": "RD-GGM-004",
+    "name": "MG Road (Mehrauli-Gurgaon Road)",
+    "category": "Arterial Road",
+    "lanes": 6,
+    "lengthKm": 7.5,
+    "speedLimitKmph": 50,
+    "surfaceType": "Asphalt",
+    "congestionLevel": "Critical",
+    "coordinates": [
+      [77.1120, 28.4900],
+      [77.0930, 28.4800],
+      [77.0750, 28.4720],
+      [77.0500, 28.4680]
+    ]
+  },
+  {
+    "id": "RD-GGM-005",
+    "name": "Sohna Elevated Highway Corridor",
+    "category": "Expressway",
+    "lanes": 6,
+    "lengthKm": 21.6,
+    "speedLimitKmph": 80,
+    "surfaceType": "Concrete & Elevated Flyover",
+    "congestionLevel": "Low",
+    "coordinates": [
+      [77.0340, 28.4520],
+      [77.0420, 28.4280],
+      [77.0450, 28.3980],
+      [77.0480, 28.3400]
+    ]
+  },
+  {
+    "id": "RD-GGM-006",
+    "name": "Southern Peripheral Road (SPR)",
+    "category": "Arterial Road",
+    "lanes": 6,
+    "lengthKm": 14.0,
+    "speedLimitKmph": 65,
+    "surfaceType": "Asphalt",
+    "congestionLevel": "Moderate",
+    "coordinates": [
+      [77.0380, 28.4010],
+      [77.0100, 28.4050],
+      [76.9800, 28.4080],
+      [76.9600, 28.3950]
+    ]
+  },
+  {
+    "id": "RD-GGM-007",
+    "name": "Sector 29 Entertainment & Civic Spine",
+    "category": "Sector Road",
+    "lanes": 4,
+    "lengthKm": 3.8,
+    "speedLimitKmph": 40,
+    "surfaceType": "Paver & Asphalt",
+    "congestionLevel": "Low",
+    "coordinates": [
+      [77.0600, 28.4720],
+      [77.0650, 28.4680],
+      [77.0720, 28.4620]
+    ]
+  }
+]
+

@@ -1,0 +1,25 @@
+{
+  "total_raw_features": 4328,
+  "duplicates_removed": 0,
+  "invalid_geometries_repaired_or_skipped": 0,
+  "valid_features_passed": 4328,
+  "building_height_audit": {
+    "source_measured": 2,
+    "levels_derived": 23,
+    "estimated": 3025,
+    "total_buildings": 3050
+  },
+  "road_classification_audit": {
+    "Service / Pedestrian Path": 703,
+    "Primary / Secondary Arterial": 53,
+    "Residential Street": 398,
+    "Tertiary / Sector Road": 55,
+    "Motorway / Expressway": 16
+  },
+  "geographic_bounds": {
+    "min_lng": 77.079798,
+    "min_lat": 28.489817,
+    "max_lng": 77.109951,
+    "max_lat": 28.510169
+  }
+}

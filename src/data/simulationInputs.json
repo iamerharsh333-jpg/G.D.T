@@ -1,0 +1,45 @@
+{
+  "simulationPresets": [
+    {
+      "id": "SIM-PEAK-AM",
+      "name": "Morning Peak Hour (08:30 - 10:30)",
+      "targetCorridor": "Delhi-Gurugram Expressway (NH-48)",
+      "vehicleVolumeMultiplier": 1.45,
+      "commercialHeavyVehiclePct": 18,
+      "publicTransitLoadPct": 88,
+      "weatherCondition": "Clear",
+      "estimatedAvgSpeedKmph": 18.5,
+      "delayFactor": "2.8x"
+    },
+    {
+      "id": "SIM-RAIN-EVENING",
+      "name": "Monsoon Rainwater Runoff & Congestion",
+      "targetCorridor": "Hero Honda Chowk & Subhash Chowk",
+      "vehicleVolumeMultiplier": 1.2,
+      "commercialHeavyVehiclePct": 12,
+      "publicTransitLoadPct": 95,
+      "weatherCondition": "Heavy Rain (Waterlogging Risk)",
+      "estimatedAvgSpeedKmph": 11.2,
+      "delayFactor": "4.2x"
+    },
+    {
+      "id": "SIM-WEEKEND-LEISURE",
+      "name": "Weekend Retail & Leisure Flow",
+      "targetCorridor": "Golf Course Road & Sector 29",
+      "vehicleVolumeMultiplier": 1.1,
+      "commercialHeavyVehiclePct": 5,
+      "publicTransitLoadPct": 65,
+      "weatherCondition": "Pleasant Evening",
+      "estimatedAvgSpeedKmph": 34.0,
+      "delayFactor": "1.3x"
+    }
+  ],
+  "defaultParameters": {
+    "vehicleVolume": 85000,
+    "roadCapacityUtilization": 78,
+    "incidentProbability": 0.04,
+    "transitShare": 32,
+    "evAdoptionRate": 14
+  }
+}
+
