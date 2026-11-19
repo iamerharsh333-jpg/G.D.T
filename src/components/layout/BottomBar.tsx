@@ -43,7 +43,7 @@ export const BottomBar: React.FC<BottomBarProps> = ({ cameraState, layerConfig }
       <div className="flex items-center space-x-2">
         <div className="flex items-center space-x-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px]">
           <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-          <span>DATA SOURCE: OPENSTREETMAP CONTRIBUTORS (ODbL) · 3,050 BUILDINGS · 1,225 ROADS</span>
+          <span>DATA SOURCE: OPENSTREETMAP (ODbL) · 3,050 BUILDINGS · 1,225 ROADS · 231 INFRASTRUCTURE ASSETS</span>
         </div>
       </div>
 

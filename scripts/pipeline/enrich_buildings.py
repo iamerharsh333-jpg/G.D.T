@@ -4,9 +4,54 @@ Extracts surveyed heights and floor counts, applies typology-aware algorithmic
 height estimation where missing, and computes geometric centroids & footprint areas.
 """
 
+import os
+import json
 import math
 import re
 from typing import Dict, Any, Tuple, Optional, List
+
+_LANDUSE_ZONES: Optional[List[Tuple[List[List[float]], str]]] = None
+
+def load_landuse_zones() -> List[Tuple[List[List[float]], str]]:
+    global _LANDUSE_ZONES
+    if _LANDUSE_ZONES is not None:
+        return _LANDUSE_ZONES
+
+    zones: List[Tuple[List[List[float]], str]] = []
+    candidates = [
+        "public/data/landuse.geojson",
+        "data/processed/landuse.geojson",
+        "data/raw/gurugram_infrastructure.geojson"
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                for feat in data.get("features", []):
+                    geom = feat.get("geometry", {})
+                    props = feat.get("properties", {}) or {}
+                    lutype = str(props.get("landuse") or props.get("sub_type") or "").lower()
+                    if geom.get("type") == "Polygon" and geom.get("coordinates") and lutype:
+                        zones.append((geom["coordinates"][0], lutype))
+                if zones:
+                    break
+            except Exception:
+                pass
+
+    _LANDUSE_ZONES = zones
+    return _LANDUSE_ZONES
+
+def point_in_polygon(x: float, y: float, ring: List[List[float]]) -> bool:
+    inside = False
+    n = len(ring)
+    for i in range(n):
+        j = (i - 1) % n
+        xi, yi = ring[i]
+        xj, yj = ring[j]
+        if ((yi > y) != (yj > y)) and (x < (xj - xi) * (y - yi) / (yj - yi) + xi):
+            inside = not inside
+    return inside
 
 def calculate_polygon_area_and_centroid(coords: List[List[float]]) -> Tuple[float, Tuple[float, float]]:
     if not coords or len(coords) < 3:
@@ -35,16 +80,24 @@ def calculate_polygon_area_and_centroid(coords: List[List[float]]) -> Tuple[floa
 
     return round(area, 1), (round(centroid_lon, 6), round(centroid_lat, 6))
 
-def classify_building(props: Dict[str, Any]) -> Tuple[str, str]:
+def classify_building(
+    props: Dict[str, Any],
+    centroid: Optional[Tuple[float, float]] = None,
+    footprint_area_sqm: float = 0.0
+) -> Tuple[str, str]:
     """
     Returns (normalized_type, land_use)
+    Utilizes explicit OSM tags, name keywords, and spatial land-use zoning.
     """
     raw_bld = str(props.get("building", "")).lower()
     amenity = str(props.get("amenity", "")).lower()
     shop = str(props.get("shop", "")).lower()
     office = str(props.get("office", "")).lower()
     landuse = str(props.get("landuse", "")).lower()
+    name = str(props.get("name") or props.get("name:en") or "").lower()
+    raw_tags = " ".join(str(v).lower() for v in props.values())
 
+    # 1. Direct tag matches
     if raw_bld in ["office"] or office or "office" in props:
         return "Commercial Office", "Commercial"
     if raw_bld in ["commercial"] or landuse == "commercial":
@@ -65,6 +118,41 @@ def classify_building(props: Dict[str, Any]) -> Tuple[str, str]:
         return "Transit Infrastructure", "Civic / Transit"
     if amenity in ["place_of_worship"]:
         return "Place of Worship", "Civic / Cultural"
+
+    # 2. Name & Raw tag keywords
+    if any(w in name or w in raw_tags for w in ["office", "tower", "cyber", "centre", "airtel", "infotech", "plaza", "corp", "dlf", "hub", "commercial"]):
+        return "Commercial Facility", "Commercial"
+    if any(w in name or w in raw_tags for w in ["apartment", "residency", "enclave", "society", "heights", "condominium"]):
+        return "Residential Multi-Storey", "Residential"
+    if any(w in name or w in raw_tags for w in ["villa", "bungalow", "house"]):
+        return "Residential Independent", "Residential"
+    if any(w in name or w in raw_tags for w in ["industr", "logistics", "warehouse", "plant", "factory", "motors"]):
+        return "Industrial / Logistics", "Industrial"
+    if any(w in name or w in raw_tags for w in ["hospital", "clinic", "health"]):
+        return "Healthcare Facility", "Institutional"
+    if any(w in name or w in raw_tags for w in ["school", "college", "academy", "institute", "vidya"]):
+        return "Educational Institute", "Institutional"
+    if any(w in name or w in raw_tags for w in ["mall", "market", "bazaar", "mart"]):
+        return "Retail / Commercial", "Commercial"
+
+    # 3. Spatial land-use zoning correlation
+    if centroid:
+        cx, cy = centroid
+        zones = load_landuse_zones()
+        for ring, lutype in zones:
+            if point_in_polygon(cx, cy, ring):
+                if "residential" in lutype:
+                    sub_type = "Residential Multi-Storey" if footprint_area_sqm > 280 else "Residential Independent"
+                    return sub_type, "Residential"
+                elif "industrial" in lutype:
+                    return "Industrial / Logistics", "Industrial"
+                elif "commercial" in lutype:
+                    return "Commercial Facility", "Commercial"
+                elif "retail" in lutype:
+                    return "Retail / Commercial", "Commercial"
+                elif "education" in lutype:
+                    return "Educational Institute", "Institutional"
+                break
 
     return "General Urban Structure", "Mixed / General"
 
@@ -101,33 +189,30 @@ def parse_height_and_levels(props: Dict[str, Any], footprint_area_sqm: float, bl
             cleaned_lvl = re.sub(r"[^\d.]", "", str(levels_val))
             if cleaned_lvl:
                 lvls = int(float(cleaned_lvl))
-                if 1 <= lvls <= 80:
+                if 0 <= lvls <= 80:
                     story_h = 3.6 if any(t in bld_type.lower() for t in ["commercial", "office", "retail", "industrial"]) else 3.1
-                    h = round(lvls * story_h, 1)
+                    h = round(lvls * story_h, 1) if lvls > 0 else 3.5
                     return h, lvls, "levels-derived"
         except (ValueError, TypeError):
             pass
 
-    # 3. Typology-aware footprint area algorithmic estimation
+    # 3. Typology-aware footprint area algorithmic estimation with realistic height variation
     if "Commercial" in bld_type or "Office" in bld_type:
-        est_h = 36.0 if footprint_area_sqm > 1500 else (24.0 if footprint_area_sqm > 600 else 14.0)
+        scale = math.sqrt(max(100.0, footprint_area_sqm))
+        est_h = min(72.0, max(18.0, 12.0 + scale * 0.55))
     elif "Residential Multi-Storey" in bld_type:
-        est_h = 30.0 if footprint_area_sqm > 1000 else (18.0 if footprint_area_sqm > 350 else 10.0)
+        scale = math.sqrt(max(100.0, footprint_area_sqm))
+        est_h = min(54.0, max(14.0, 10.0 + scale * 0.45))
     elif "Industrial" in bld_type:
-        est_h = 14.0 if footprint_area_sqm > 800 else 9.0
+        scale = math.sqrt(max(100.0, footprint_area_sqm))
+        est_h = min(22.0, max(8.5, 6.0 + scale * 0.22))
     elif "Retail" in bld_type:
-        est_h = 10.5
+        est_h = 12.5 if footprint_area_sqm > 500 else 8.5
     elif "Residential Independent" in bld_type:
-        est_h = 7.5
+        est_h = 10.5 if footprint_area_sqm > 220 else 7.5
     else:
-        if footprint_area_sqm > 2500:
-            est_h = 28.0
-        elif footprint_area_sqm > 1000:
-            est_h = 18.0
-        elif footprint_area_sqm > 400:
-            est_h = 12.0
-        else:
-            est_h = 8.5
+        scale = math.sqrt(max(60.0, footprint_area_sqm))
+        est_h = min(26.0, max(8.0, 5.5 + scale * 0.32))
 
     # Leave floor count as None when estimated, so missing values are NOT invented!
     return round(est_h, 1), None, "estimated"
@@ -144,7 +229,7 @@ def enrich_building_feature(feat: Dict[str, Any], valid_geom: Dict[str, Any]) ->
         footprint_coords = valid_geom["coordinates"][0][0]
 
     area_sqm, centroid = calculate_polygon_area_and_centroid(footprint_coords)
-    bld_type, land_use = classify_building(props)
+    bld_type, land_use = classify_building(props, centroid, area_sqm)
     height, levels, height_source = parse_height_and_levels(props, area_sqm, bld_type)
 
     raw_name = props.get("name") or props.get("name:en")

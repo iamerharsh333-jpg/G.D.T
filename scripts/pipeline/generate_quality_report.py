@@ -20,6 +20,9 @@ def compile_data_quality_report(
     water = categorized.get("water", [])
     amenities = categorized.get("amenities", [])
     landuse = categorized.get("landuse", [])
+    healthcare = categorized.get("healthcare", [])
+    education = categorized.get("education", [])
+    transport = categorized.get("transport", [])
 
     # Building completeness
     bld_total = len(buildings)
@@ -65,10 +68,12 @@ def compile_data_quality_report(
         "layer_feature_counts": {
             "buildings": bld_total,
             "roads": rd_total,
-            "parks_and_leisure": len(parks),
-            "water_bodies": len(water),
-            "landuse_zones": len(landuse),
-            "amenities_and_pois": len(amenities)
+            "parks_and_greenery": len(parks),
+            "water_bodies_and_drainage": len(water),
+            "landuse_and_zoning": len(landuse),
+            "healthcare_facilities": len(healthcare),
+            "educational_institutions": len(education),
+            "public_transport": len(transport)
         },
         "building_attribute_coverage": {
             "total_buildings": bld_total,

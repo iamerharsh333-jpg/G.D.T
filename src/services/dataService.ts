@@ -44,15 +44,22 @@ export const dataService = {
     return geojson.features.map((f: any) => {
       const p = f.properties || {};
       const centroid = p.centroid || [77.089, 28.495];
+      const hasSourceName = Boolean(p.has_source_name);
+      const hasSourceHeight = p.height_source === 'source-provided';
+      const hasSourceLevels = Boolean(p.has_source_levels);
+
       return {
         id: p.id || f.id || 'bld-unknown',
         osm_id: p.osm_id || p.id,
         name: p.name || `OSM Building ${p.id}`,
+        hasSourceName: hasSourceName,
         type: p.building_type || p.building || 'Commercial Office',
         building_type: p.building_type || p.building,
         height: p.height || 15.0,
         height_source: p.height_source || 'estimated',
-        floors: p.levels || (p.height ? Math.max(1, Math.round(p.height / 3.3)) : null),
+        hasSourceHeight: hasSourceHeight,
+        floors: p.levels !== undefined && p.levels !== null ? p.levels : null,
+        hasSourceLevels: hasSourceLevels,
         landUse: p.landuse || (['office', 'commercial'].includes(p.building_type) ? 'Commercial' : 'Residential'),
         coordinates: {
           lng: centroid[0],
@@ -65,94 +72,98 @@ export const dataService = {
         builtYear: 2018,
         occupancyEstimate: p.footprint_area_sqm ? Math.round(p.footprint_area_sqm * (p.levels || 3) / 15) : 450,
         rawTags: p.raw_tags || {},
-        dataSource: p.data_source || 'OpenStreetMap Contributors',
+        dataSource: p.data_source || 'OpenStreetMap Contributors (ODbL)',
       } as BuildingData;
     });
   },
 
-  // Real roads converted to RoadData array
+  // Real roads converted to RoadData array (All 1,225 features preserved)
   async getRealRoads(): Promise<RoadData[]> {
     const geojson = await this.loadGeoJsonLayer('roads');
     if (!geojson || !geojson.features) {
       return this.getDemoRoads();
     }
 
-    return geojson.features.slice(0, 150).map((f: any) => {
+    return geojson.features.map((f: any) => {
       const p = f.properties || {};
       const coords = f.geometry?.coordinates || [];
       return {
         id: p.id || f.id || 'road-unknown',
         osm_id: p.osm_id || p.id,
         name: p.name || `OSM ${p.category || 'Road'}`,
+        hasSourceName: Boolean(p.has_source_name),
         category: p.category || 'Primary / Secondary Arterial',
         highwayType: p.highway,
-        lanes: p.lanes || 4,
-        lengthKm: 2.5,
-        speedLimitKmph: p.maxspeed || 50,
+        lanes: p.lanes || (p.visual_priority === 1 ? 6 : p.visual_priority === 2 ? 4 : 2),
+        hasSourceLanes: Boolean(p.has_source_lanes),
+        lengthKm: p.length_km ? Math.round(p.length_km * 100) / 100 : 0.5,
+        speedLimitKmph: p.maxspeed || (p.visual_priority === 1 ? 80 : p.visual_priority === 2 ? 50 : 30),
+        hasSourceSpeed: Boolean(p.has_source_maxspeed),
         surfaceType: p.surface || 'Asphalt',
+        oneway: p.oneway || null,
+        hasSourceOneway: Boolean(p.has_source_oneway),
         coordinates: coords,
         congestionLevel: (p.visual_priority === 1 ? 'Heavy' : p.visual_priority === 2 ? 'Moderate' : 'Low') as any,
         visualPriority: p.visual_priority,
         color: p.color,
-        dataSource: 'OpenStreetMap Contributors',
+        rawTags: p.raw_tags || {},
+        dataSource: 'OpenStreetMap Contributors (ODbL)',
       } as RoadData;
     });
   },
 
-  // Real amenities and parks converted to InfrastructurePoint array
+  // Real infrastructure across all 6 verified GIS layers
   async getRealInfrastructure(): Promise<InfrastructurePoint[]> {
-    const amenitiesGeo = await this.loadGeoJsonLayer('amenities');
-    const parksGeo = await this.loadGeoJsonLayer('parks');
+    const layerNames = ['healthcare', 'education', 'transport', 'parks', 'water', 'landuse'];
+    const layerPromises = layerNames.map((name) => this.loadGeoJsonLayer(name));
+    const results = await Promise.all(layerPromises);
 
     const points: InfrastructurePoint[] = [];
 
-    if (amenitiesGeo && amenitiesGeo.features) {
-      amenitiesGeo.features.forEach((f: any) => {
-        const p = f.properties || {};
-        let coords = [77.085, 28.495];
-        if (f.geometry?.type === 'Point') {
-          coords = f.geometry.coordinates;
-        } else if (f.geometry?.coordinates && f.geometry.coordinates[0]) {
-          coords = f.geometry.coordinates[0][0] || coords;
-        }
-        points.push({
-          id: p.id || f.id || 'amenity-unknown',
-          osm_id: p.osm_id || p.id,
-          name: p.name || `${p.amenity} facility`,
-          category: (p.amenity === 'hospital' || p.amenity === 'clinic' ? 'Hospital' : 'Public Amenity') as any,
-          lat: coords[1],
-          lng: coords[0],
-          sector: 'DLF Cyber City / Phase 3',
-          operationalStatus: 'Operational',
-          description: `OSM Tagged ${p.amenity || 'Facility'}`,
-          dataSource: 'OpenStreetMap Contributors',
-          rawTags: p.raw_tags || {},
-        });
-      });
-    }
+    results.forEach((geo, idx) => {
+      if (!geo || !geo.features) return;
+      const layerName = layerNames[idx];
 
-    if (parksGeo && parksGeo.features) {
-      parksGeo.features.forEach((f: any) => {
+      geo.features.forEach((f: any) => {
         const p = f.properties || {};
-        let coords = [77.085, 28.495];
-        if (f.geometry?.coordinates && f.geometry.coordinates[0]) {
-          coords = f.geometry.coordinates[0][0] || coords;
+        const centroid = p.centroid || [77.089, 28.495];
+        let lat = centroid[1];
+        let lng = centroid[0];
+
+        if (f.geometry?.type === 'Point' && f.geometry.coordinates) {
+          lng = f.geometry.coordinates[0];
+          lat = f.geometry.coordinates[1];
         }
+
+        const categoryMap: Record<string, any> = {
+          healthcare: 'Healthcare Facility',
+          education: 'Educational Institution',
+          transport: 'Public Transport',
+          parks: 'Parks & Greenery',
+          water: 'Water Body & Drainage',
+          landuse: 'Land Use & Zoning',
+        };
+
         points.push({
-          id: p.id || f.id || 'park-unknown',
+          id: p.id || f.id || `${layerName}-${points.length}`,
           osm_id: p.osm_id || p.id,
-          name: p.name || 'Public Park / Green Space',
-          category: 'Park / Green Space',
-          lat: coords[1],
-          lng: coords[0],
-          sector: 'DLF Phase 2/3 Green Lung',
+          name: p.name || `OSM ${p.sub_type || layerName}`,
+          hasSourceName: Boolean(p.has_source_name),
+          category: p.category || categoryMap[layerName] || 'Public Amenity',
+          subType: p.sub_type || p.amenity || p.leisure || p.landuse || layerName,
+          geometryType: f.geometry?.type || 'Point',
+          lat: lat,
+          lng: lng,
+          sector: p.address || 'DLF Cyber City / Udyog Vihar / Sector 14-25',
           operationalStatus: 'Operational',
-          description: `OpenStreetMap Park Polygon (${p.type || 'park'})`,
-          dataSource: 'OpenStreetMap Contributors',
+          description: `OSM ${p.category || categoryMap[layerName]} (${p.sub_type || layerName})`,
+          operator: p.operator,
+          network: p.network,
+          dataSource: p.data_source || 'OpenStreetMap Contributors (ODbL) via Overpass Turbo',
           rawTags: p.raw_tags || {},
         });
       });
-    }
+    });
 
     if (points.length === 0) {
       return this.getDemoInfrastructure();
@@ -188,6 +199,18 @@ export const dataService = {
 
   getInfrastructure(): InfrastructurePoint[] {
     return this.getDemoInfrastructure();
+  },
+
+  async getDataQualityReport(): Promise<any | null> {
+    try {
+      const res = await fetch('/data/data_quality_report.json');
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (e) {
+      console.warn('[dataService] Failed to load data_quality_report.json:', e);
+    }
+    return null;
   },
 
   getDashboardStats() {

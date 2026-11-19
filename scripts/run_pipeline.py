@@ -21,6 +21,7 @@ from pipeline.validate_geojson import validate_and_repair_geometry
 from pipeline.enrich_buildings import enrich_building_feature
 from pipeline.process_roads import process_road_feature
 from pipeline.generate_quality_report import compile_data_quality_report
+from pipeline.process_infrastructure import process_infrastructure
 
 RAW_DIR = "data/raw"
 PROCESSED_DIR = "data/processed"
@@ -192,10 +193,25 @@ def run_pipeline():
         with open(public_target, "w", encoding="utf-8") as f:
             json.dump(fc, f, separators=(',', ':'))
 
+    # Run Infrastructure Processing for the new Overpass Turbo dataset
+    print("[Pipeline] Running additional infrastructure dataset processing...")
+    process_infrastructure()
+
+    # Read all finalized layers for quality audit
+    finalized_layers = {
+        "buildings": categorized["buildings"],
+        "roads": categorized["roads"],
+    }
+    for extra in ["landuse", "parks", "healthcare", "education", "transport", "water"]:
+        epath = os.path.join(PUBLIC_DIR, f"{extra}.geojson")
+        if os.path.exists(epath):
+            with open(epath, "r", encoding="utf-8") as f:
+                finalized_layers[extra] = json.load(f).get("features", [])
+
     # Compile Quality Report
     quality_report = compile_data_quality_report(
         raw_features,
-        categorized,
+        finalized_layers,
         geom_distribution,
         bbox_rounded,
         invalid_count,
@@ -205,6 +221,27 @@ def run_pipeline():
     qr_path = os.path.join(PUBLIC_DIR, "data_quality_report.json")
     with open(qr_path, "w", encoding="utf-8") as f:
         json.dump(quality_report, f, indent=2)
+
+    # Compile dataset metadata
+    meta = {
+        "region": "Gurugram, Haryana, India",
+        "focus_area": "DLF Cyber City, Udyog Vihar, DLF Phases II & III, Sector 14-25",
+        "bbox": bbox_rounded,
+        "source": "OpenStreetMap Contributors (ODbL) via Overpass Turbo",
+        "processed_at": "2026-11-19",
+        "layers": {
+            "buildings": {"count": len(finalized_layers["buildings"]), "file": "buildings.geojson"},
+            "roads": {"count": len(finalized_layers["roads"]), "file": "roads.geojson"},
+            "landuse": {"count": len(finalized_layers.get("landuse", [])), "file": "landuse.geojson"},
+            "parks": {"count": len(finalized_layers.get("parks", [])), "file": "parks.geojson"},
+            "healthcare": {"count": len(finalized_layers.get("healthcare", [])), "file": "healthcare.geojson"},
+            "education": {"count": len(finalized_layers.get("education", [])), "file": "education.geojson"},
+            "transport": {"count": len(finalized_layers.get("transport", [])), "file": "transport.geojson"},
+            "water": {"count": len(finalized_layers.get("water", [])), "file": "water.geojson"},
+        }
+    }
+    with open(os.path.join(PUBLIC_DIR, "metadata.json"), "w", encoding="utf-8") as f:
+        json.dump(meta, f, indent=2)
 
     print(f"[Pipeline] Compiled quality report at {qr_path}")
     print("[Pipeline] All layers processed successfully.")

@@ -175,6 +175,69 @@ export const BuildingDetailPanel: React.FC<BuildingDetailPanelProps> = ({
         </div>
       </div>
 
+      {/* Attribute Provenance & Missing Attribute Indicators */}
+      <div className="p-2.5 rounded-lg bg-slate-800/30 border border-slate-800 space-y-2 text-[11px]">
+        <div className="text-[10px] font-mono uppercase text-slate-400 tracking-wider flex items-center justify-between">
+          <span>Attribute Status & Integrity</span>
+          <span className="text-[9px] text-cyan-400 font-mono">OSM Audit</span>
+        </div>
+
+        <div className="space-y-1 text-[10px] font-mono">
+          {/* Height Indicator */}
+          <div className="flex items-center justify-between">
+            <span className="text-slate-400">Height Attribute:</span>
+            {isSourceProvided ? (
+              <span className="text-emerald-400 flex items-center space-x-1">
+                <CheckCircle2 className="w-3 h-3" />
+                <span>Surveyed Tag Present</span>
+              </span>
+            ) : isLevelsDerived ? (
+              <span className="text-cyan-400 flex items-center space-x-1">
+                <CheckCircle2 className="w-3 h-3" />
+                <span>Derived from Levels Tag</span>
+              </span>
+            ) : (
+              <span className="text-amber-400 flex items-center space-x-1">
+                <AlertCircle className="w-3 h-3" />
+                <span>Missing in OSM (Estimated)</span>
+              </span>
+            )}
+          </div>
+
+          {/* Floor count indicator */}
+          <div className="flex items-center justify-between">
+            <span className="text-slate-400">Storeys / Levels:</span>
+            {building.hasSourceLevels ? (
+              <span className="text-emerald-400 flex items-center space-x-1">
+                <CheckCircle2 className="w-3 h-3" />
+                <span>Surveyed ({building.floors} fl)</span>
+              </span>
+            ) : (
+              <span className="text-slate-400 flex items-center space-x-1">
+                <AlertCircle className="w-3 h-3 text-amber-500/70" />
+                <span>Not Recorded in OSM</span>
+              </span>
+            )}
+          </div>
+
+          {/* Name indicator */}
+          <div className="flex items-center justify-between">
+            <span className="text-slate-400">Feature Name:</span>
+            {building.hasSourceName ? (
+              <span className="text-emerald-400 flex items-center space-x-1">
+                <CheckCircle2 className="w-3 h-3" />
+                <span>Surveyed Title</span>
+              </span>
+            ) : (
+              <span className="text-slate-400 flex items-center space-x-1">
+                <AlertCircle className="w-3 h-3 text-amber-500/70" />
+                <span>Unnamed Structure</span>
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Source Attribution */}
       <div className="p-2 rounded bg-slate-800/50 border border-slate-700/50 text-[10px] text-slate-400 flex items-center justify-between">
         <span>Source: {building.dataSource}</span>

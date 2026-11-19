@@ -20,6 +20,8 @@ interface TopNavbarProps {
   onOpenAuditModal?: () => void;
   buildings: BuildingData[];
   infrastructure: InfrastructurePoint[];
+  isNightMode?: boolean;
+  onToggleNightMode?: () => void;
 }
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
@@ -28,11 +30,22 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   onOpenAuditModal,
   buildings,
   infrastructure,
+  isNightMode: controlledNightMode,
+  onToggleNightMode,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [isNightMode, setIsNightMode] = useState(true);
+  const [internalNightMode, setInternalNightMode] = useState(true);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+
+  const isNight = controlledNightMode !== undefined ? controlledNightMode : internalNightMode;
+  const handleToggleNight = () => {
+    if (onToggleNightMode) {
+      onToggleNightMode();
+    } else {
+      setInternalNightMode(!internalNightMode);
+    }
+  };
 
   const filteredBuildings = searchQuery.trim()
     ? buildings
@@ -218,11 +231,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
         {/* Day / Night Toggle */}
         <button
-          onClick={() => setIsNightMode(!isNightMode)}
+          onClick={handleToggleNight}
           className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 transition"
-          title={isNightMode ? 'Night view active' : 'Daylight view active'}
+          title={isNight ? 'Switch to daylight sun view' : 'Switch to digital twin night view'}
         >
-          {isNightMode ? <Moon className="w-4 h-4 text-cyan-400" /> : <Sun className="w-4 h-4 text-amber-400" />}
+          {isNight ? <Moon className="w-4 h-4 text-cyan-400" /> : <Sun className="w-4 h-4 text-amber-400" />}
         </button>
 
         {/* Notification Bell */}

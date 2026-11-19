@@ -16,7 +16,7 @@
   },
   "summary": {
     "total_raw_features": 4328,
-    "total_validated_features": 4328,
+    "total_validated_features": 4506,
     "geometry_integrity_rate": "100.0%",
     "invalid_geometries_found": 0,
     "duplicate_ids_removed": 0
@@ -29,23 +29,25 @@
   "layer_feature_counts": {
     "buildings": 3050,
     "roads": 1225,
-    "parks_and_leisure": 18,
-    "water_bodies": 3,
-    "landuse_zones": 25,
-    "amenities_and_pois": 7
+    "parks_and_greenery": 64,
+    "water_bodies_and_drainage": 15,
+    "landuse_and_zoning": 85,
+    "healthcare_facilities": 19,
+    "educational_institutions": 16,
+    "public_transport": 32
   },
   "building_attribute_coverage": {
     "total_buildings": 3050,
     "surveyed_height_count": 2,
     "surveyed_height_pct": 0.07,
-    "surveyed_floor_count": 25,
-    "surveyed_floor_pct": 0.82,
+    "surveyed_floor_count": 26,
+    "surveyed_floor_pct": 0.85,
     "named_buildings_count": 55,
     "named_buildings_pct": 1.8,
     "height_provenance": {
       "source_provided": 2,
-      "levels_derived": 23,
-      "algorithmically_estimated": 3025
+      "levels_derived": 24,
+      "algorithmically_estimated": 3024
     }
   },
   "road_attribute_coverage": {

@@ -4,12 +4,12 @@ import {
   HeartPulse,
   GraduationCap,
   Trees,
-  Zap,
   Train,
-  Building,
   MapPin,
   Eye,
   CheckCircle2,
+  Droplets,
+  Layers,
 } from 'lucide-react';
 import { InfrastructureCategory, InfrastructurePoint } from '../types';
 
@@ -26,12 +26,12 @@ export const InfrastructurePage: React.FC<InfrastructurePageProps> = ({
 
   const categories = [
     'ALL',
-    'Hospital',
-    'Rapid Transit / Metro',
-    'Park / Green Space',
-    'School / University',
-    'Power & Utilities',
-    'Civic Facility',
+    'Healthcare Facility',
+    'Educational Institution',
+    'Public Transport',
+    'Parks & Greenery',
+    'Water Body & Drainage',
+    'Land Use & Zoning',
   ];
 
   const filteredItems =
@@ -41,18 +41,24 @@ export const InfrastructurePage: React.FC<InfrastructurePageProps> = ({
 
   const getCategoryIcon = (category: InfrastructureCategory) => {
     switch (category) {
+      case 'Healthcare Facility':
       case 'Hospital':
         return <HeartPulse className="w-4 h-4 text-rose-400" />;
-      case 'Rapid Transit / Metro':
-        return <Train className="w-4 h-4 text-blue-400" />;
-      case 'Park / Green Space':
-        return <Trees className="w-4 h-4 text-emerald-400" />;
+      case 'Educational Institution':
       case 'School / University':
         return <GraduationCap className="w-4 h-4 text-indigo-400" />;
-      case 'Power & Utilities':
-        return <Zap className="w-4 h-4 text-amber-400" />;
+      case 'Public Transport':
+      case 'Rapid Transit / Metro':
+        return <Train className="w-4 h-4 text-cyan-400" />;
+      case 'Parks & Greenery':
+      case 'Park / Green Space':
+        return <Trees className="w-4 h-4 text-emerald-400" />;
+      case 'Water Body & Drainage':
+      case 'Water Body':
+        return <Droplets className="w-4 h-4 text-blue-400" />;
+      case 'Land Use & Zoning':
       default:
-        return <Building className="w-4 h-4 text-cyan-400" />;
+        return <Layers className="w-4 h-4 text-amber-400" />;
     }
   };
 
@@ -64,18 +70,19 @@ export const InfrastructurePage: React.FC<InfrastructurePageProps> = ({
           <div className="flex items-center space-x-2">
             <Activity className="w-5 h-5 text-emerald-400" />
             <h1 className="text-lg font-bold">Public & Critical Infrastructure Asset Map</h1>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800/60 font-semibold">
-              CRITICAL UTILITIES
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800/60 font-semibold flex items-center space-x-1">
+              <CheckCircle2 className="w-3 h-3" />
+              <span>{infrastructure.length} REAL OSM INFRASTRUCTURE ASSETS</span>
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1 font-mono">
-            Hospitals, smart grid substations, metro terminals, green reserves, and municipal centers
+            Hospitals, Rapid Metro Gurgaon stations, schools, urban green reserves, water retention ponds, and zoning sectors
           </p>
         </div>
 
         <button
           onClick={onNavigateTo3D}
-          className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-medium shadow-lg shadow-cyan-950 transition self-start sm:self-auto"
+          className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-medium shadow-lg shadow-cyan-950 transition self-start sm:self-auto font-mono"
         >
           <Eye className="w-3.5 h-3.5" />
           <span>View Markers in 3D</span>

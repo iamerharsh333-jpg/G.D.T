@@ -3,7 +3,6 @@ import {
   Layers,
   Building,
   Navigation,
-  Activity,
   MapPin,
   Trees,
   Droplets,
@@ -11,6 +10,10 @@ import {
   ChevronUp,
   Crosshair,
   Sliders,
+  Train,
+  GraduationCap,
+  HeartPulse,
+  Globe,
 } from 'lucide-react';
 import { MapLayerConfig } from '../../types';
 
@@ -18,12 +21,14 @@ interface MapLayerControlsProps {
   layerConfig: MapLayerConfig;
   onToggleLayer: (key: keyof MapLayerConfig) => void;
   onFlyToPreset: (presetKey: 'cybercity' | 'golfcourse' | 'nh48' | 'overview' | 'udyogvihar') => void;
+  onSelectBasemap?: (style: 'dark' | 'satellite' | 'osm') => void;
 }
 
 export const MapLayerControls: React.FC<MapLayerControlsProps> = ({
   layerConfig,
   onToggleLayer,
   onFlyToPreset,
+  onSelectBasemap,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [showRoadSubFilters, setShowRoadSubFilters] = useState(false);
@@ -146,11 +151,25 @@ export const MapLayerControls: React.FC<MapLayerControlsProps> = ({
               )}
             </div>
 
+            {/* Land Use & Zoning */}
+            <label className="flex items-center justify-between p-1.5 rounded hover:bg-slate-800/60 cursor-pointer">
+              <div className="flex items-center space-x-2 text-slate-300">
+                <Layers className="w-3.5 h-3.5 text-amber-400" />
+                <span>Land Use & Zoning (85)</span>
+              </div>
+              <input
+                type="checkbox"
+                checked={layerConfig.landuse}
+                onChange={() => onToggleLayer('landuse')}
+                className="rounded border-slate-700 text-amber-500 focus:ring-0 bg-slate-950 cursor-pointer"
+              />
+            </label>
+
             {/* Parks / Green Spaces */}
             <label className="flex items-center justify-between p-1.5 rounded hover:bg-slate-800/60 cursor-pointer">
               <div className="flex items-center space-x-2 text-slate-300">
                 <Trees className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Parks & Greenery (OSM)</span>
+                <span>Parks & Greenery (64)</span>
               </div>
               <input
                 type="checkbox"
@@ -160,31 +179,59 @@ export const MapLayerControls: React.FC<MapLayerControlsProps> = ({
               />
             </label>
 
-            {/* Water Bodies */}
+            {/* Healthcare Facilities */}
+            <label className="flex items-center justify-between p-1.5 rounded hover:bg-slate-800/60 cursor-pointer">
+              <div className="flex items-center space-x-2 text-slate-300">
+                <HeartPulse className="w-3.5 h-3.5 text-rose-400" />
+                <span>Healthcare Facilities (19)</span>
+              </div>
+              <input
+                type="checkbox"
+                checked={layerConfig.healthcare}
+                onChange={() => onToggleLayer('healthcare')}
+                className="rounded border-slate-700 text-rose-500 focus:ring-0 bg-slate-950 cursor-pointer"
+              />
+            </label>
+
+            {/* Educational Institutions */}
+            <label className="flex items-center justify-between p-1.5 rounded hover:bg-slate-800/60 cursor-pointer">
+              <div className="flex items-center space-x-2 text-slate-300">
+                <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Educational Institutes (16)</span>
+              </div>
+              <input
+                type="checkbox"
+                checked={layerConfig.education}
+                onChange={() => onToggleLayer('education')}
+                className="rounded border-slate-700 text-indigo-500 focus:ring-0 bg-slate-950 cursor-pointer"
+              />
+            </label>
+
+            {/* Public Transport & Metro */}
+            <label className="flex items-center justify-between p-1.5 rounded hover:bg-slate-800/60 cursor-pointer">
+              <div className="flex items-center space-x-2 text-slate-300">
+                <Train className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Public Transport (32)</span>
+              </div>
+              <input
+                type="checkbox"
+                checked={layerConfig.transport}
+                onChange={() => onToggleLayer('transport')}
+                className="rounded border-slate-700 text-cyan-500 focus:ring-0 bg-slate-950 cursor-pointer"
+              />
+            </label>
+
+            {/* Water Bodies & Drainage */}
             <label className="flex items-center justify-between p-1.5 rounded hover:bg-slate-800/60 cursor-pointer">
               <div className="flex items-center space-x-2 text-slate-300">
                 <Droplets className="w-3.5 h-3.5 text-blue-400" />
-                <span>Water Bodies & Reservoirs</span>
+                <span>Water & Drainage (15)</span>
               </div>
               <input
                 type="checkbox"
                 checked={layerConfig.water}
                 onChange={() => onToggleLayer('water')}
                 className="rounded border-slate-700 text-blue-500 focus:ring-0 bg-slate-950 cursor-pointer"
-              />
-            </label>
-
-            {/* Public Amenities */}
-            <label className="flex items-center justify-between p-1.5 rounded hover:bg-slate-800/60 cursor-pointer">
-              <div className="flex items-center space-x-2 text-slate-300">
-                <Activity className="w-3.5 h-3.5 text-rose-400" />
-                <span>Clinics, Hospitals & POIs</span>
-              </div>
-              <input
-                type="checkbox"
-                checked={layerConfig.amenities}
-                onChange={() => onToggleLayer('amenities')}
-                className="rounded border-slate-700 text-rose-500 focus:ring-0 bg-slate-950 cursor-pointer"
               />
             </label>
 
@@ -201,6 +248,52 @@ export const MapLayerControls: React.FC<MapLayerControlsProps> = ({
                 className="rounded border-slate-700 text-cyan-500 focus:ring-0 bg-slate-950 cursor-pointer"
               />
             </label>
+          </div>
+
+          {/* Basemap Surface Provider Selector (Zero API Key Architecture) */}
+          <div className="pt-2 border-t border-slate-800">
+            <div className="text-[10px] font-mono text-slate-400 uppercase mb-1.5 flex items-center justify-between">
+              <span className="flex items-center space-x-1">
+                <Globe className="w-3 h-3 text-cyan-400" />
+                <span>Basemap (Zero Paid Keys)</span>
+              </span>
+              <span className="text-[9px] text-emerald-400 font-mono">Free</span>
+            </div>
+            <div className="grid grid-cols-3 gap-1 font-mono text-[9px]">
+              <button
+                onClick={() => onSelectBasemap?.('dark')}
+                className={`p-1.5 rounded border text-center transition ${
+                  layerConfig.basemapStyle === 'dark' || !layerConfig.basemapStyle
+                    ? 'bg-cyan-950 text-cyan-300 border-cyan-500 font-semibold'
+                    : 'bg-slate-800/70 text-slate-400 border-slate-700 hover:text-slate-200'
+                }`}
+                title="Esri World Dark Gray Canvas (High-contrast GIS)"
+              >
+                Dark Canvas
+              </button>
+              <button
+                onClick={() => onSelectBasemap?.('satellite')}
+                className={`p-1.5 rounded border text-center transition ${
+                  layerConfig.basemapStyle === 'satellite'
+                    ? 'bg-cyan-950 text-cyan-300 border-cyan-500 font-semibold'
+                    : 'bg-slate-800/70 text-slate-400 border-slate-700 hover:text-slate-200'
+                }`}
+                title="Esri World Imagery (High-res Aerial Satellite Photography)"
+              >
+                Satellite
+              </button>
+              <button
+                onClick={() => onSelectBasemap?.('osm')}
+                className={`p-1.5 rounded border text-center transition ${
+                  layerConfig.basemapStyle === 'osm'
+                    ? 'bg-cyan-950 text-cyan-300 border-cyan-500 font-semibold'
+                    : 'bg-slate-800/70 text-slate-400 border-slate-700 hover:text-slate-200'
+                }`}
+                title="OpenStreetMap Standard Vector-derived Cartography"
+              >
+                Street Map
+              </button>
+            </div>
           </div>
 
           {/* Quick Camera Bookmarks */}

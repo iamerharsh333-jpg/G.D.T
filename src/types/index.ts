@@ -36,11 +36,14 @@ export interface BuildingData {
   id: string;
   osm_id?: string;
   name: string;
+  hasSourceName?: boolean;
   type: BuildingType;
   building_type?: string;
   height: number; // meters
   height_source: HeightSource;
+  hasSourceHeight?: boolean;
   floors?: number | null;
+  hasSourceLevels?: boolean;
   landUse: LandUseCategory;
   coordinates: {
     lat: number;
@@ -71,12 +74,17 @@ export interface RoadData {
   id: string;
   osm_id?: string;
   name: string;
+  hasSourceName?: boolean;
   category: RoadCategory;
   highwayType?: string;
   lanes: number;
+  hasSourceLanes?: boolean;
   lengthKm: number;
   speedLimitKmph: number;
+  hasSourceSpeed?: boolean;
   surfaceType: string;
+  oneway?: string | null;
+  hasSourceOneway?: boolean;
   coordinates: [number, number][]; // [lon, lat] pairs
   congestionLevel: 'Low' | 'Moderate' | 'Heavy' | 'Critical';
   visualPriority?: number;
@@ -86,6 +94,12 @@ export interface RoadData {
 }
 
 export type InfrastructureCategory =
+  | 'Healthcare Facility'
+  | 'Educational Institution'
+  | 'Public Transport'
+  | 'Parks & Greenery'
+  | 'Water Body & Drainage'
+  | 'Land Use & Zoning'
   | 'Hospital'
   | 'School / University'
   | 'Park / Green Space'
@@ -99,13 +113,18 @@ export interface InfrastructurePoint {
   id: string;
   osm_id?: string;
   name: string;
+  hasSourceName?: boolean;
   category: InfrastructureCategory;
+  subType?: string;
+  geometryType?: string;
   lat: number;
   lng: number;
   sector?: string;
   capacity?: string;
   operationalStatus: 'Operational' | 'Under Maintenance' | 'Planned' | 'Active';
   description: string;
+  operator?: string;
+  network?: string;
   dataSource?: string;
   rawTags?: Record<string, any>;
 }
@@ -117,13 +136,17 @@ export interface MapLayerConfig {
   arterials: boolean;
   residentialRoads: boolean;
   serviceRoads: boolean;
-  parks: boolean;
-  water: boolean;
   landuse: boolean;
+  parks: boolean;
+  healthcare: boolean;
+  education: boolean;
+  transport: boolean;
+  water: boolean;
   amenities: boolean;
   boundaries: boolean;
   greenCover: boolean;
   nightLighting: boolean;
+  basemapStyle: 'dark' | 'satellite' | 'osm';
 }
 
 export interface MapCameraState {

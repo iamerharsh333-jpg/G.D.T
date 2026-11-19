@@ -1,58 +1,46 @@
 {
   "region": "Gurugram, Haryana, India",
-  "focus_area": "DLF Cyber City, Udyog Vihar & DLF Phase II/III",
+  "focus_area": "DLF Cyber City, Udyog Vihar, DLF Phases II & III, Sector 14-25",
   "bbox": [
-    77.079798,
-    28.489817,
-    77.109951,
-    28.510169
+    77.068705,
+    28.481372,
+    77.112642,
+    28.521349
   ],
-  "source": "OpenStreetMap Contributors (ODbL)",
-  "extraction_date": "2026-11-16",
-  "coordinate_reference_system": "EPSG:4326 (WGS84)",
-  "boundary_status": "GMDA planning extent is an approximate municipal polygon guideline (unverified against official cadastral survey shapefile)",
+  "source": "OpenStreetMap Contributors (ODbL) via Overpass Turbo",
+  "processed_at": "2026-11-19",
   "layers": {
     "buildings": {
       "count": 3050,
-      "file": "/data/buildings.geojson",
-      "size_kb": 1824.3,
-      "verified": true,
-      "verification_notes": "Originates from actual OpenStreetMap geographic elements."
+      "file": "buildings.geojson"
     },
     "roads": {
       "count": 1225,
-      "file": "/data/roads.geojson",
-      "size_kb": 706.2,
-      "verified": true,
-      "verification_notes": "Originates from actual OpenStreetMap geographic elements."
-    },
-    "parks": {
-      "count": 18,
-      "file": "/data/parks.geojson",
-      "size_kb": 9.9,
-      "verified": true,
-      "verification_notes": "Originates from actual OpenStreetMap geographic elements."
+      "file": "roads.geojson"
     },
     "landuse": {
-      "count": 25,
-      "file": "/data/landuse.geojson",
-      "size_kb": 16.4,
-      "verified": false,
-      "verification_notes": "Originates from actual OpenStreetMap geographic elements."
+      "count": 85,
+      "file": "landuse.geojson"
+    },
+    "parks": {
+      "count": 64,
+      "file": "parks.geojson"
+    },
+    "healthcare": {
+      "count": 19,
+      "file": "healthcare.geojson"
+    },
+    "education": {
+      "count": 16,
+      "file": "education.geojson"
+    },
+    "transport": {
+      "count": 32,
+      "file": "transport.geojson"
     },
     "water": {
-      "count": 3,
-      "file": "/data/water.geojson",
-      "size_kb": 4.0,
-      "verified": true,
-      "verification_notes": "Originates from actual OpenStreetMap geographic elements."
-    },
-    "amenities": {
-      "count": 7,
-      "file": "/data/amenities.geojson",
-      "size_kb": 3.9,
-      "verified": true,
-      "verification_notes": "Originates from actual OpenStreetMap geographic elements."
+      "count": 15,
+      "file": "water.geojson"
     }
   }
 }

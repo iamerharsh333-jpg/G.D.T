@@ -10,6 +10,7 @@ import {
   ChevronDown,
   ChevronUp,
   CheckCircle2,
+  AlertCircle,
   ShieldCheck,
 } from 'lucide-react';
 import { RoadData } from '../../types';
@@ -101,6 +102,80 @@ export const RoadDetailPanel: React.FC<RoadDetailPanelProps> = ({ road, onClose 
           <div className="text-slate-400 text-[10px]">COORDINATE VERTICES</div>
           <div className="text-xs font-semibold text-slate-200 mt-0.5">
             {road.coordinates?.length || 2} Points
+          </div>
+        </div>
+      </div>
+
+      {/* Attribute Provenance & Missing Attribute Indicators */}
+      <div className="p-2.5 rounded-lg bg-slate-800/30 border border-slate-800 space-y-2 text-[11px]">
+        <div className="text-[10px] font-mono uppercase text-slate-400 tracking-wider flex items-center justify-between">
+          <span>Attribute Status & Integrity</span>
+          <span className="text-[9px] text-cyan-400 font-mono">OSM Audit</span>
+        </div>
+
+        <div className="space-y-1 text-[10px] font-mono">
+          {/* Road Name */}
+          <div className="flex items-center justify-between">
+            <span className="text-slate-400">Street Name:</span>
+            {road.hasSourceName ? (
+              <span className="text-emerald-400 flex items-center space-x-1">
+                <CheckCircle2 className="w-3 h-3" />
+                <span>Surveyed Name</span>
+              </span>
+            ) : (
+              <span className="text-slate-400 flex items-center space-x-1">
+                <AlertCircle className="w-3 h-3 text-amber-500/70" />
+                <span>Unrecorded in OSM</span>
+              </span>
+            )}
+          </div>
+
+          {/* Lane Count */}
+          <div className="flex items-center justify-between">
+            <span className="text-slate-400">Lane Count Tag:</span>
+            {road.hasSourceLanes ? (
+              <span className="text-emerald-400 flex items-center space-x-1">
+                <CheckCircle2 className="w-3 h-3" />
+                <span>Surveyed ({road.lanes} lanes)</span>
+              </span>
+            ) : (
+              <span className="text-slate-400 flex items-center space-x-1">
+                <AlertCircle className="w-3 h-3 text-amber-500/70" />
+                <span>Default Assigned ({road.lanes} lanes)</span>
+              </span>
+            )}
+          </div>
+
+          {/* Speed Limit */}
+          <div className="flex items-center justify-between">
+            <span className="text-slate-400">Speed Limit Tag:</span>
+            {road.hasSourceSpeed ? (
+              <span className="text-emerald-400 flex items-center space-x-1">
+                <CheckCircle2 className="w-3 h-3" />
+                <span>Surveyed ({road.speedLimitKmph} km/h)</span>
+              </span>
+            ) : (
+              <span className="text-slate-400 flex items-center space-x-1">
+                <AlertCircle className="w-3 h-3 text-amber-500/70" />
+                <span>Default Assigned</span>
+              </span>
+            )}
+          </div>
+
+          {/* One-Way Tag */}
+          <div className="flex items-center justify-between">
+            <span className="text-slate-400">One-Way Tag:</span>
+            {road.hasSourceOneway && road.oneway ? (
+              <span className="text-emerald-400 flex items-center space-x-1">
+                <CheckCircle2 className="w-3 h-3" />
+                <span>{road.oneway}</span>
+              </span>
+            ) : (
+              <span className="text-slate-400 flex items-center space-x-1">
+                <AlertCircle className="w-3 h-3 text-amber-500/70" />
+                <span>Not Specified in OSM</span>
+              </span>
+            )}
           </div>
         </div>
       </div>

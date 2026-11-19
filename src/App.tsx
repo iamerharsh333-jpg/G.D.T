@@ -33,15 +33,16 @@ export const App: React.FC = () => {
   const [roads, setRoads] = useState<RoadData[]>(dataService.getDemoRoads());
   const [infrastructure, setInfrastructure] = useState<InfrastructurePoint[]>(dataService.getDemoInfrastructure());
 
-  // Selected building & road for the inspection drawers
+  // Selected building, road & infrastructure for the inspection drawers
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingData | null>(null);
   const [selectedRoad, setSelectedRoad] = useState<RoadData | null>(null);
+  const [selectedInfrastructure, setSelectedInfrastructure] = useState<InfrastructurePoint | null>(null);
   const [focusedBuilding, setFocusedBuilding] = useState<BuildingData | null>(null);
 
   // Dataset audit modal
   const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
 
-  // Map layer toggle configuration
+  // Map layer toggle configuration across all 6 verified GIS layers
   const [layerConfig, setLayerConfig] = useState<MapLayerConfig>({
     buildings: true,
     roads: true,
@@ -49,13 +50,17 @@ export const App: React.FC = () => {
     arterials: true,
     residentialRoads: true,
     serviceRoads: true,
-    parks: true,
-    water: true,
     landuse: true,
+    parks: true,
+    healthcare: true,
+    education: true,
+    transport: true,
+    water: true,
     amenities: true,
     boundaries: true,
     greenCover: true,
     nightLighting: true,
+    basemapStyle: 'dark',
   });
 
   // Map camera state (updated dynamically by Cesium viewer)
@@ -100,6 +105,13 @@ export const App: React.FC = () => {
     }));
   };
 
+  const handleSelectBasemap = (style: 'dark' | 'satellite' | 'osm') => {
+    setLayerConfig((prev) => ({
+      ...prev,
+      basemapStyle: style,
+    }));
+  };
+
   const handleFlyToPreset = (presetKey: 'cybercity' | 'golfcourse' | 'nh48' | 'overview' | 'udyogvihar') => {
     setFlyToPresetKey(presetKey);
     setTimeout(() => setFlyToPresetKey(null), 500);
@@ -109,8 +121,16 @@ export const App: React.FC = () => {
     setFocusedBuilding(bld);
     setSelectedBuilding(bld);
     setSelectedRoad(null);
+    setSelectedInfrastructure(null);
     setActiveView('3d-city');
     setTimeout(() => setFocusedBuilding(null), 500);
+  };
+
+  const handleFocusInfrastructure = (item: InfrastructurePoint) => {
+    setSelectedInfrastructure(item);
+    setSelectedBuilding(null);
+    setSelectedRoad(null);
+    setActiveView('3d-city');
   };
 
   const handleSearchSelect = (item: {
@@ -121,7 +141,8 @@ export const App: React.FC = () => {
       const b = item.data as BuildingData;
       handleFocusBuilding(b);
     } else {
-      setActiveView('3d-city');
+      const infra = item.data as InfrastructurePoint;
+      handleFocusInfrastructure(infra);
     }
   };
 
@@ -141,6 +162,8 @@ export const App: React.FC = () => {
         onSearchSelect={handleSearchSelect}
         onResetView={handleResetView}
         onOpenAuditModal={() => setIsAuditModalOpen(true)}
+        isNightMode={layerConfig.nightLighting}
+        onToggleNightMode={() => handleToggleLayer('nightLighting')}
       />
 
       {/* Main Content Body */}
@@ -166,15 +189,30 @@ export const App: React.FC = () => {
               infrastructure={infrastructure}
               layerConfig={layerConfig}
               onToggleLayer={handleToggleLayer}
+              onSelectBasemap={handleSelectBasemap}
               selectedBuilding={selectedBuilding}
               selectedRoad={selectedRoad}
+              selectedInfrastructure={selectedInfrastructure}
               onSelectBuilding={(bld) => {
                 setSelectedBuilding(bld);
-                if (bld) setSelectedRoad(null);
+                if (bld) {
+                  setSelectedRoad(null);
+                  setSelectedInfrastructure(null);
+                }
               }}
               onSelectRoad={(rd) => {
                 setSelectedRoad(rd);
-                if (rd) setSelectedBuilding(null);
+                if (rd) {
+                  setSelectedBuilding(null);
+                  setSelectedInfrastructure(null);
+                }
+              }}
+              onSelectInfrastructure={(infra) => {
+                setSelectedInfrastructure(infra);
+                if (infra) {
+                  setSelectedBuilding(null);
+                  setSelectedRoad(null);
+                }
               }}
               cameraState={cameraState}
               onCameraChange={setCameraState}
@@ -182,6 +220,7 @@ export const App: React.FC = () => {
               onFlyToPreset={handleFlyToPreset}
               focusedBuilding={focusedBuilding}
               onFocusBuilding={handleFocusBuilding}
+              onFocusInfrastructure={handleFocusInfrastructure}
             />
           )}
 
